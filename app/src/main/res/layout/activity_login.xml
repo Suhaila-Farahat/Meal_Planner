@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp">
+    <ImageView
+        android:layout_width="219dp"
+        android:layout_height="138dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Login"
+        android:textColor="@android:color/white"
+        android:textSize="42sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/input_background"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="12dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:textColor="@color/grey"
+        android:textColorHint="@color/dark_grey" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/input_background"
+        android:hint="password"
+        android:inputType="textPassword"
+        android:textColor="@color/grey"
+        android:textColorHint="@color/dark_grey"
+        android:drawableStart="@drawable/ic_password"
+        android:drawablePadding="12dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_background"
+        android:text="Login"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account ?"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Sign Up"
+            android:textColor="#52299B"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
