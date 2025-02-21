@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose a Country to show Famous Meals"
+        android:textColor="#009688"
+        android:textSize="24sp"
+        android:paddingBottom="20dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textAlignment="center"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_flags_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" />
+
+</LinearLayout>
