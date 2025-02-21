@@ -1,4 +1,4 @@
-package com.example.mealplanner.model;
+package com.example.mealplanner.models.mealModel;
 import com.google.gson.annotations.SerializedName;
 
 public class Meal {

@@ -1,4 +1,4 @@
-package com.example.mealplanner.model;
+package com.example.mealplanner.models.mealModel;
 
 import com.example.mealplanner.network.MealApiService;
 
@@ -36,7 +36,7 @@ public class MealRepository {
 //        localDataSource.delete(meal);
 //    }
 
-    public Single<MealResponse> getRandomMealFromNetwork() {
+    public Single<NetworkResponse> getRandomMealFromNetwork() {
         return remoteDataSource.getRandomMeal();
     }
 }

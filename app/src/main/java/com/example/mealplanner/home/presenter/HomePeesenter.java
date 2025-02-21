@@ -1,7 +1,7 @@
 package com.example.mealplanner.home.presenter;
 
 
-public interface AllMeals {
+public interface HomePeesenter {
 
     public void getMeals();
 

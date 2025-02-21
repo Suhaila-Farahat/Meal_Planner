@@ -1,19 +1,19 @@
 package com.example.mealplanner.home.presenter;
 
 import com.example.mealplanner.home.view.AllMealsView;
-import com.example.mealplanner.model.MealRepository;
-import com.example.mealplanner.model.MealResponse;
+import com.example.mealplanner.models.mealModel.MealRepository;
+import com.example.mealplanner.models.mealModel.NetworkResponse;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class AllMealsImp implements AllMeals {
+public class HomePresenterImpl implements HomePeesenter {
 
     private MealRepository mealRepository;
     private AllMealsView IView;
 
-    public AllMealsImp(MealRepository mealRepository, AllMealsView allMealsView) {
+    public HomePresenterImpl(MealRepository mealRepository, AllMealsView allMealsView) {
         this.mealRepository = mealRepository;
         this.IView = allMealsView;
     }
@@ -23,13 +23,13 @@ public class AllMealsImp implements AllMeals {
         mealRepository.getRandomMealFromNetwork()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<MealResponse>() {
+                .subscribe(new SingleObserver<NetworkResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(MealResponse mealResponse) {
+                    public void onSuccess(NetworkResponse mealResponse) {
                         if (mealResponse.getMeals() != null && !mealResponse.getMeals().isEmpty()) {
                             IView.showMeal(mealResponse.getMeals());
                         } else {
