@@ -1,20 +1,28 @@
 package com.example.mealplanner.models.mealModel;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.List;
+
+
+import com.google.gson.annotations.SerializedName;
 
 public class NetworkResponse {
     @SerializedName("meals")
     private List<Meal> meals;
 
-    public List<Meal> getMeals() {
+    @SerializedName("categories")
+    private List<MealCategory> categories;
 
+    public List<Meal> getMeals() {
         return meals;
     }
 
-    private List<Category> categories;
-
-    public List<Category> getCategories() {
+    public List<MealCategory> getCategories() {
         return categories;
     }
 }
+
+
+
+
+
+

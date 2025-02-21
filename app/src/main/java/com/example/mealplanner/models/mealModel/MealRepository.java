@@ -1,42 +1,37 @@
 package com.example.mealplanner.models.mealModel;
 
-import com.example.mealplanner.network.MealApiService;
 
 
 import io.reactivex.rxjava3.core.Single;
 
+import com.example.mealplanner.network.RemoteDataSource;
+
+
 public class MealRepository {
+    private static MealRepository instance;
+    private final RemoteDataSource remoteDataSource;
 
-    //MealLocalDataSource localDataSource;
-    MealApiService remoteDataSource;
-
-    private static MealRepository repo = null;
-
-    public MealRepository( MealApiService remoteDataSource) {
-      //  this.localDataSource = localDataSource;
+    private MealRepository(RemoteDataSource remoteDataSource) {
         this.remoteDataSource = remoteDataSource;
     }
 
-    public static MealRepository getInstance(MealApiService remoteDataSource) {
-        if (repo == null) {
-            repo = new MealRepository(remoteDataSource);
+    public static MealRepository getInstance(RemoteDataSource remoteDataSource) {
+        if (instance == null) {
+            synchronized (MealRepository.class) {
+                if (instance == null) {
+                    instance = new MealRepository(remoteDataSource);
+                }
+            }
         }
-        return repo;
+        return instance;
     }
 
-//    public Flowable<List<Meal>> getAllMeals() {
-//        return localDataSource.getMeals();
-//    }
-
-//    public void insert(Meal meal) {
-//        localDataSource.insert(meal);
-//    }
-
-//    public void delete(Meal meal) {
-//        localDataSource.delete(meal);
-//    }
-
-    public Single<NetworkResponse> getRandomMealFromNetwork() {
+    public Single<NetworkResponse> getRandomMeal() {
         return remoteDataSource.getRandomMeal();
     }
+
+    public Single<NetworkResponse> getCategories() {
+        return remoteDataSource.getCategories();
+    }
 }
+
