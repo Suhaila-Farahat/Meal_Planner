@@ -1,6 +1,5 @@
 package com.example.mealplanner.categories.view;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealViewHolder> {
-    private Context context;
     private List<Meal> mealList = new ArrayList<>();
+    private OnMealClickListener listener;
 
-    public MealListAdapter(Context context) {
-        this.context = context;
+    public interface OnMealClickListener {
+        void onMealClick(Meal meal);
+    }
+
+    public MealListAdapter(OnMealClickListener listener) {
+        this.listener = listener;
     }
 
     public void setMeals(List<Meal> meals) {
@@ -30,7 +33,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
     @NonNull
     @Override
     public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_meal, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meal, parent, false);
         return new MealViewHolder(view);
     }
 
@@ -39,9 +42,15 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         Meal meal = mealList.get(position);
         holder.mealName.setText(meal.getName());
 
-        Glide.with(context)
+        Glide.with(holder.itemView.getContext())
                 .load(meal.getImageUrl())
                 .into(holder.mealImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMealClick(meal);
+            }
+        });
     }
 
     @Override

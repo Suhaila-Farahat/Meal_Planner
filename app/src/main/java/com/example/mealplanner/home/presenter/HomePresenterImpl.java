@@ -28,12 +28,12 @@ public class HomePresenterImpl implements HomePresenter {
         mealRepository.getRandomMeal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<MealResponse>() {  // ✅ Fixed response type
+                .subscribe(new SingleObserver<MealResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {}
 
                     @Override
-                    public void onSuccess(MealResponse mealResponse) { // ✅ Fixed response type
+                    public void onSuccess(MealResponse mealResponse) {
                         if (mealResponse.getMeals() != null && !mealResponse.getMeals().isEmpty()) {
                             IView.showMeal(mealResponse.getMeals());
                         } else {
@@ -53,12 +53,12 @@ public class HomePresenterImpl implements HomePresenter {
         mealRepository.getCategories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<CategoryResponse>() {  // ✅ Fixed response type
+                .subscribe(new SingleObserver<CategoryResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {}
 
                     @Override
-                    public void onSuccess(CategoryResponse categoryResponse) { // ✅ Fixed response type
+                    public void onSuccess(CategoryResponse categoryResponse) {
                         if (categoryResponse.getCategories() != null && !categoryResponse.getCategories().isEmpty()) {
                             IView.showCategories(categoryResponse.getCategories());
                         } else {
@@ -75,7 +75,7 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void getFlags() {
-        Single.fromCallable(FlagUtils::getCountryFlags)  // ✅ Cleaner lambda syntax
+        Single.fromCallable(FlagUtils::getCountryFlags)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<CountryFlag>>() {

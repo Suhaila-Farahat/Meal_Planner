@@ -50,6 +50,7 @@ public class CountryFlagAdapter extends RecyclerView.Adapter<CountryFlagAdapter.
 
     @Override
     public int getItemCount() {
+
         return flags.size();
     }
 

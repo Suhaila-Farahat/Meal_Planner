@@ -65,7 +65,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
             showError("Meal ID is missing");
         }
 
-
         return view;
     }
 

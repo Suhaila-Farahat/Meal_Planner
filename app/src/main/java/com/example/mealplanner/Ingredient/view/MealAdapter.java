@@ -1,26 +1,28 @@
 package com.example.mealplanner.Ingredient.view;
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
 import com.example.mealplanner.models.mealModel.Meal;
-
 import java.util.List;
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
     private List<Meal> meals;
+    private OnMealClickListener listener;
 
-    public MealAdapter(List<Meal> meals) {
+    public interface OnMealClickListener {
+        void onMealClick(Meal meal);
+    }
+
+    public MealAdapter(List<Meal> meals, OnMealClickListener listener) {
         this.meals = meals;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +40,12 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
         Glide.with(holder.itemView.getContext())
                 .load(meal.getImageUrl())
                 .into(holder.mealImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMealClick(meal);
+            }
+        });
     }
 
     @Override

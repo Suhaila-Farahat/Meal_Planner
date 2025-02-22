@@ -1,6 +1,5 @@
 package com.example.mealplanner.Ingredient.view;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +8,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.mealplanner.Ingredient.presenter.MealCardsListPresenter;
 import com.example.mealplanner.R;
+import com.example.mealplanner.mealDetails.view.MealDetailsFragment;
 import com.example.mealplanner.models.mealModel.Meal;
 import java.util.List;
 
@@ -41,8 +41,20 @@ public class MealCardsListFragment extends Fragment implements MealCardsListView
 
     @Override
     public void showMeals(List<Meal> meals) {
-        MealAdapter adapter = new MealAdapter(meals);
+        MealAdapter adapter = new MealAdapter(meals, meal -> navigateToMealDetails(meal));
         mealRecyclerView.setAdapter(adapter);
+    }
+
+    private void navigateToMealDetails(Meal meal) {
+        MealDetailsFragment mealDetailsFragment = new MealDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("mealId", meal.getId());
+        mealDetailsFragment.setArguments(bundle);
+
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, mealDetailsFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -50,4 +62,3 @@ public class MealCardsListFragment extends Fragment implements MealCardsListView
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
-

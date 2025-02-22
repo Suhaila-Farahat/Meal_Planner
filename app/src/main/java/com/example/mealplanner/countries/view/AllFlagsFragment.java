@@ -1,4 +1,4 @@
-package com.example.mealplanner.home.view;
+package com.example.mealplanner.countries.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mealplanner.R;
-import com.example.mealplanner.countries.view.CountryMealListFragment;
+import com.example.mealplanner.home.view.CountryFlagAdapter;
 import com.example.mealplanner.models.flagsModel.CountryFlag;
 import com.example.mealplanner.util.FlagUtils;
 

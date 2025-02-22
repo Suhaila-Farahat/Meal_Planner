@@ -1,15 +1,18 @@
 package com.example.mealplanner;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.mealplanner.home.view.AllFlagsFragment;
+import com.example.mealplanner.favorites.view.FavoritesFragment;
 import com.example.mealplanner.home.view.HomeFragment;
+import com.example.mealplanner.search.view.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,11 +22,20 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
-            if (item.getItemId() == R.id.nav_home) {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
-            } else if (item.getItemId() == R.id.all_flags_recycler_view) {
-                selectedFragment = new AllFlagsFragment();
+            } else if (itemId == R.id.nav_search) {
+                selectedFragment = new SearchFragment();
+            } else if (itemId == R.id.nav_favorites) {
+                selectedFragment = new FavoritesFragment();
+            } else if (itemId == R.id.nav_calender) {
+                selectedFragment = new CalendarFragment();
+            } else if (itemId == R.id.nav_profile) {
+                selectedFragment = new ProfileFragment();
             }
+
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, selectedFragment)
