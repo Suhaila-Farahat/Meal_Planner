@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.mealplanner.Ingredient.view.IngredientSelectionFragment;
 import com.example.mealplanner.R;
 import com.example.mealplanner.categories.view.MealListFragment;
 import com.example.mealplanner.countries.view.CountryMealListFragment;
@@ -45,6 +46,8 @@ public class HomeFragment extends Fragment implements AllMealsView {
         categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
         flagRecyclerView = view.findViewById(R.id.flag_recycler_view);
         seeAllFlags = view.findViewById(R.id.see_all_text);
+        TextView selectIngredientsText = view.findViewById(R.id.selectIngredientsText);
+
 
         homePresenter = new HomePresenterImpl(this);
 
@@ -59,6 +62,13 @@ public class HomeFragment extends Fragment implements AllMealsView {
             getParentFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, allFlagsFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+        selectIngredientsText.setOnClickListener(v -> {
+            Fragment ingredientSelectionFragment = new IngredientSelectionFragment();
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, ingredientSelectionFragment)
                     .addToBackStack(null)
                     .commit();
         });

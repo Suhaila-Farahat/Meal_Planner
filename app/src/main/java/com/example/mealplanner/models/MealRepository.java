@@ -4,6 +4,8 @@ package com.example.mealplanner.models;
 
 import io.reactivex.rxjava3.core.Single;
 
+import com.example.mealplanner.models.responses.CategoryResponse;
+import com.example.mealplanner.models.responses.MealResponse;
 import com.example.mealplanner.network.RemoteDataSource;
 
 
@@ -26,12 +28,12 @@ public class MealRepository {
         return instance;
     }
 
-    public Single<NetworkResponse> getRandomMeal() {
+    public Single<MealResponse> getRandomMeal() {
 
         return remoteDataSource.getRandomMeal();
     }
 
-    public Single<NetworkResponse> getCategories() {
+    public Single<CategoryResponse> getCategories() {
 
         return remoteDataSource.getCategories();
     }

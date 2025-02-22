@@ -3,7 +3,8 @@ package com.example.mealplanner.home.presenter;
 import com.example.mealplanner.home.view.AllMealsView;
 import com.example.mealplanner.models.flagsModel.CountryFlag;
 import com.example.mealplanner.models.MealRepository;
-import com.example.mealplanner.models.NetworkResponse;
+import com.example.mealplanner.models.responses.MealResponse;
+import com.example.mealplanner.models.responses.CategoryResponse;
 import com.example.mealplanner.network.RemoteDataSource;
 import com.example.mealplanner.util.FlagUtils;
 import java.util.List;
@@ -27,12 +28,12 @@ public class HomePresenterImpl implements HomePresenter {
         mealRepository.getRandomMeal()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<NetworkResponse>() {
+                .subscribe(new SingleObserver<MealResponse>() {  // ✅ Fixed response type
                     @Override
                     public void onSubscribe(Disposable d) {}
 
                     @Override
-                    public void onSuccess(NetworkResponse mealResponse) {
+                    public void onSuccess(MealResponse mealResponse) { // ✅ Fixed response type
                         if (mealResponse.getMeals() != null && !mealResponse.getMeals().isEmpty()) {
                             IView.showMeal(mealResponse.getMeals());
                         } else {
@@ -52,12 +53,12 @@ public class HomePresenterImpl implements HomePresenter {
         mealRepository.getCategories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<NetworkResponse>() {
+                .subscribe(new SingleObserver<CategoryResponse>() {  // ✅ Fixed response type
                     @Override
                     public void onSubscribe(Disposable d) {}
 
                     @Override
-                    public void onSuccess(NetworkResponse categoryResponse) {
+                    public void onSuccess(CategoryResponse categoryResponse) { // ✅ Fixed response type
                         if (categoryResponse.getCategories() != null && !categoryResponse.getCategories().isEmpty()) {
                             IView.showCategories(categoryResponse.getCategories());
                         } else {
@@ -74,7 +75,7 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void getFlags() {
-        Single.fromCallable(() -> FlagUtils.getCountryFlags())
+        Single.fromCallable(FlagUtils::getCountryFlags)  // ✅ Cleaner lambda syntax
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<CountryFlag>>() {

@@ -1,6 +1,9 @@
 package com.example.mealplanner.network;
 
 import com.example.mealplanner.models.NetworkResponse;
+import com.example.mealplanner.models.responses.CategoryResponse;
+import com.example.mealplanner.models.responses.MealResponse;
+
 import io.reactivex.rxjava3.core.Single;
 
 public class RemoteDataSource {
@@ -22,19 +25,19 @@ public class RemoteDataSource {
         return instance;
     }
 
-    public Single<NetworkResponse> getRandomMeal() {
+    public Single<MealResponse> getRandomMeal() {
         return mealApiService.getRandomMeal();
     }
 
-    public Single<NetworkResponse> getCategories() {
+    public Single<CategoryResponse> getCategories() {
         return mealApiService.getCategories();
     }
 
-    public Single<NetworkResponse> getFilteredMealsByCategory(String category) {
+    public Single<MealResponse> getFilteredMealsByCategory(String category) {
         return mealApiService.getFilteredMealsByCategory(category);
     }
 
-    public Single<NetworkResponse> getFilteredMealsByCountry(String country) {
+    public Single<MealResponse> getFilteredMealsByCountry(String country) {
         return mealApiService.getFilteredMealsByCountry(country);
     }
 }

@@ -23,14 +23,12 @@ public class CountryMealListPresenter {
 
     @SuppressLint("CheckResult")
     public void fetchMealsByCountry(String countryName) {
-        view.showLoading();
         compositeDisposable.add(
                 remoteDataSource.getFilteredMealsByCountry(countryName)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 response -> {
-                                    view.hideLoading();
                                     List<Meal> meals = response.getMeals();
                                     if (meals != null && !meals.isEmpty()) {
                                         view.showMeals(meals);
@@ -39,7 +37,6 @@ public class CountryMealListPresenter {
                                     }
                                 },
                                 throwable -> {
-                                    view.hideLoading();
                                     view.showError("Failed to load meals: " + throwable.getMessage());
                                 }
                         )

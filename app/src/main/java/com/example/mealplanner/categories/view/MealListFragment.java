@@ -21,7 +21,6 @@ import java.util.List;
 
 public class MealListFragment extends Fragment implements MealListView {
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
     private MealListPresenter presenter;
     private MealListAdapter adapter;
 
@@ -33,7 +32,6 @@ public class MealListFragment extends Fragment implements MealListView {
         View view = inflater.inflate(R.layout.fragment_meal_list, container, false);
 
         recyclerView = view.findViewById(R.id.meal_recycler_view);
-        progressBar = view.findViewById(R.id.progress_bar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MealListAdapter(getContext());
@@ -60,15 +58,9 @@ public class MealListFragment extends Fragment implements MealListView {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
 
-    @Override
-    public void hideLoading() {
-        progressBar.setVisibility(View.GONE);
-    }
+
+
 
     @Override
     public void onDestroyView() {

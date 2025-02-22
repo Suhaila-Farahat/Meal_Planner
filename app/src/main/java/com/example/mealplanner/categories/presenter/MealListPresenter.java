@@ -21,14 +21,12 @@ public class MealListPresenter {
 
     @SuppressLint("CheckResult")
     public void fetchMeals(String categoryName) {
-        view.showLoading();
         compositeDisposable.add(
                 remoteDataSource.getFilteredMealsByCategory(categoryName)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 response -> {
-                                    view.hideLoading();
                                     List<Meal> meals = response.getMeals();
                                     if (meals != null && !meals.isEmpty()) {
                                         view.showMeals(meals);
@@ -37,7 +35,6 @@ public class MealListPresenter {
                                     }
                                 },
                                 throwable -> {
-                                    view.hideLoading();
                                     view.showError("Failed to load meals: " + throwable.getMessage());
                                 }
                         )

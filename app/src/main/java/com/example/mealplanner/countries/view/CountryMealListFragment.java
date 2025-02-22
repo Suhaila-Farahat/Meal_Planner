@@ -1,6 +1,5 @@
 package com.example.mealplanner.countries.view;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealplanner.R;
 import com.example.mealplanner.countries.presenter.CountryMealListPresenter;
+import com.example.mealplanner.mealDetails.view.MealDetailsFragment;
 import com.example.mealplanner.models.mealModel.Meal;
 import java.util.List;
 
-public class CountryMealListFragment extends Fragment implements CountryMealListView {
+public class CountryMealListFragment extends Fragment implements CountryMealListView, CountryMealListAdapter.OnMealClickListener {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private CountryMealListPresenter presenter;
@@ -31,10 +31,9 @@ public class CountryMealListFragment extends Fragment implements CountryMealList
         View view = inflater.inflate(R.layout.fragment_meal_list, container, false);
 
         recyclerView = view.findViewById(R.id.meal_recycler_view);
-        progressBar = view.findViewById(R.id.progress_bar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CountryMealListAdapter(getContext());
+        adapter = new CountryMealListAdapter(getContext(), this);
         recyclerView.setAdapter(adapter);
 
         presenter = new CountryMealListPresenter(this);
@@ -57,14 +56,19 @@ public class CountryMealListFragment extends Fragment implements CountryMealList
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
+
 
     @Override
-    public void hideLoading() {
-        progressBar.setVisibility(View.GONE);
+    public void onMealClick(String mealId) {
+        MealDetailsFragment mealDetailsFragment = new MealDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("mealId", mealId);
+        mealDetailsFragment.setArguments(bundle);
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, mealDetailsFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -73,4 +77,3 @@ public class CountryMealListFragment extends Fragment implements CountryMealList
         presenter.onDestroy();
     }
 }
-

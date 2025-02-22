@@ -1,6 +1,5 @@
 package com.example.mealplanner.countries.view;
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,11 @@ import java.util.List;
 public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealListAdapter.MealViewHolder> {
     private Context context;
     private List<Meal> mealList = new ArrayList<>();
+    private OnMealClickListener mealClickListener;
 
-    public CountryMealListAdapter(Context context) {
+    public CountryMealListAdapter(Context context, OnMealClickListener mealClickListener) {
         this.context = context;
+        this.mealClickListener = mealClickListener;
     }
 
     public void setMeals(List<Meal> meals) {
@@ -39,10 +40,15 @@ public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealList
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
         Meal meal = mealList.get(position);
         holder.mealName.setText(meal.getName());
-
         Glide.with(context)
                 .load(meal.getImageUrl())
                 .into(holder.mealImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (mealClickListener != null) {
+                mealClickListener.onMealClick(meal.getId());
+            }
+        });
     }
 
     @Override
@@ -56,8 +62,12 @@ public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealList
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
-            mealName = itemView.findViewById(R.id.meal_name);
-            mealImage = itemView.findViewById(R.id.meal_image);
+            mealName = itemView.findViewById(R.id.mealcard_name);
+            mealImage = itemView.findViewById(R.id.mealcard_image);
         }
+    }
+
+    public interface OnMealClickListener {
+        void onMealClick(String mealId);
     }
 }
