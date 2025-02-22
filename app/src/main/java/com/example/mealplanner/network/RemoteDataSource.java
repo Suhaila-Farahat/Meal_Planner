@@ -1,24 +1,14 @@
 package com.example.mealplanner.network;
 
-import com.example.mealplanner.models.mealModel.NetworkResponse;
+import com.example.mealplanner.models.NetworkResponse;
 import io.reactivex.rxjava3.core.Single;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
 
 public class RemoteDataSource {
-    private static final String BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
     private static volatile RemoteDataSource instance;
     private final MealApiService mealApiService;
 
     private RemoteDataSource() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                .build();
-        mealApiService = retrofit.create(MealApiService.class);
+        mealApiService = RetrofitClient.getInstance().create(MealApiService.class);
     }
 
     public static RemoteDataSource getInstance() {
@@ -40,11 +30,11 @@ public class RemoteDataSource {
         return mealApiService.getCategories();
     }
 
-    interface MealApiService {
-        @GET("random.php")
-        Single<NetworkResponse> getRandomMeal();
+    public Single<NetworkResponse> getFilteredMealsByCategory(String category) {
+        return mealApiService.getFilteredMealsByCategory(category);
+    }
 
-        @GET("categories.php")
-        Single<NetworkResponse> getCategories();
+    public Single<NetworkResponse> getFilteredMealsByCountry(String country) {
+        return mealApiService.getFilteredMealsByCountry(country);
     }
 }

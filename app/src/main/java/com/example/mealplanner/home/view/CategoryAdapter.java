@@ -1,4 +1,4 @@
-package com.example.mealplanner.home.view.categories;
+package com.example.mealplanner.home.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,23 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
 import com.example.mealplanner.models.mealModel.MealCategory;
-
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-    private List<MealCategory> categoryList;
     private Context context;
+    private List<MealCategory> categories;
+    private OnCategoryClickListener listener;
 
-    public CategoryAdapter(Context context, List<MealCategory> categoryList) {
+    public interface OnCategoryClickListener {
+        void onCategoryClick(String categoryName);
+    }
+
+    public CategoryAdapter(Context context, List<MealCategory> categories, OnCategoryClickListener listener) {
         this.context = context;
-        this.categoryList = categoryList;
+        this.categories = categories;
+        this.listener = listener;
     }
 
     @NonNull
@@ -34,24 +37,30 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MealCategory category = categoryList.get(position);
+        MealCategory category = categories.get(position);
         holder.categoryName.setText(category.getStrCategory());
         Glide.with(context).load(category.getStrCategoryThumb()).into(holder.categoryImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCategoryClick(category.getStrCategory());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return categoryList.size();
+        return categories.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView categoryImage;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView categoryName;
+        ImageView categoryImage;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            categoryImage = itemView.findViewById(R.id.category_image);
             categoryName = itemView.findViewById(R.id.category_name);
+            categoryImage = itemView.findViewById(R.id.category_image);
         }
     }
 }

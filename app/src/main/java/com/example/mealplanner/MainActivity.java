@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.mealplanner.home.view.countries.AllFlagsFragment;
+import com.example.mealplanner.home.view.AllFlagsFragment;
 import com.example.mealplanner.home.view.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

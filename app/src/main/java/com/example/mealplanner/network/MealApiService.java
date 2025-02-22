@@ -1,6 +1,6 @@
 package com.example.mealplanner.network;
 
-import com.example.mealplanner.models.mealModel.NetworkResponse;
+import com.example.mealplanner.models.NetworkResponse;
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

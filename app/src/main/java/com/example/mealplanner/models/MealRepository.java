@@ -1,4 +1,4 @@
-package com.example.mealplanner.models.mealModel;
+package com.example.mealplanner.models;
 
 
 
@@ -27,10 +27,12 @@ public class MealRepository {
     }
 
     public Single<NetworkResponse> getRandomMeal() {
+
         return remoteDataSource.getRandomMeal();
     }
 
     public Single<NetworkResponse> getCategories() {
+
         return remoteDataSource.getCategories();
     }
 }

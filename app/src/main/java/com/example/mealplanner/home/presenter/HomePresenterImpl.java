@@ -2,8 +2,8 @@ package com.example.mealplanner.home.presenter;
 
 import com.example.mealplanner.home.view.AllMealsView;
 import com.example.mealplanner.models.flagsModel.CountryFlag;
-import com.example.mealplanner.models.mealModel.MealRepository;
-import com.example.mealplanner.models.mealModel.NetworkResponse;
+import com.example.mealplanner.models.MealRepository;
+import com.example.mealplanner.models.NetworkResponse;
 import com.example.mealplanner.network.RemoteDataSource;
 import com.example.mealplanner.util.FlagUtils;
 import java.util.List;

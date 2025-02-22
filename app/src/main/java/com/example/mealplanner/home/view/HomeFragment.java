@@ -7,28 +7,31 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
+import com.example.mealplanner.categories.view.MealListFragment;
+import com.example.mealplanner.countries.view.CountryMealListFragment;
 import com.example.mealplanner.home.presenter.HomePresenter;
 import com.example.mealplanner.home.presenter.HomePresenterImpl;
-import com.example.mealplanner.home.view.categories.CategoryAdapter;
-import com.example.mealplanner.home.view.countries.AllFlagsFragment;
-import com.example.mealplanner.home.view.countries.CountryFlagAdapter;
 import com.example.mealplanner.models.flagsModel.CountryFlag;
 import com.example.mealplanner.models.mealModel.Meal;
 import com.example.mealplanner.models.mealModel.MealCategory;
+import com.example.mealplanner.util.FlagUtils;
+
 import java.util.List;
 
 public class HomeFragment extends Fragment implements AllMealsView {
-    private TextView mealNameTextView, seeAllText;
+    private TextView mealNameTextView, seeAllFlags;
     private ImageView mealImageView;
-    private HomePresenter homePresenter;
     private RecyclerView categoryRecyclerView, flagRecyclerView;
+    private HomePresenter homePresenter;
 
     public HomeFragment() {}
 
@@ -41,20 +44,24 @@ public class HomeFragment extends Fragment implements AllMealsView {
         mealImageView = view.findViewById(R.id.meal_image);
         categoryRecyclerView = view.findViewById(R.id.category_recycler_view);
         flagRecyclerView = view.findViewById(R.id.flag_recycler_view);
-        seeAllText = view.findViewById(R.id.see_all_text);
+        seeAllFlags = view.findViewById(R.id.see_all_text);
 
         homePresenter = new HomePresenterImpl(this);
+
         homePresenter.getMeals();
         homePresenter.getCategories();
         homePresenter.getFlags();
 
-        seeAllText.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, new AllFlagsFragment())
-                        .addToBackStack(null)
-                        .commit()
-        );
+        seeAllFlags.setOnClickListener(v -> {
+            List<CountryFlag> flags = FlagUtils.getCountryFlags();
+
+            AllFlagsFragment allFlagsFragment = AllFlagsFragment.newInstance(flags);
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, allFlagsFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         return view;
     }
@@ -72,16 +79,42 @@ public class HomeFragment extends Fragment implements AllMealsView {
 
     @Override
     public void showCategories(List<MealCategory> categories) {
-        CategoryAdapter adapter = new CategoryAdapter(getContext(), categories);
+        CategoryAdapter adapter = new CategoryAdapter(getContext(), categories, categoryName -> {
+            MealListFragment mealListFragment = new MealListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("category_name", categoryName);
+            mealListFragment.setArguments(bundle);
+
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, mealListFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         categoryRecyclerView.setAdapter(adapter);
     }
 
     @Override
     public void showFlags(List<CountryFlag> flags) {
-        CountryFlagAdapter adapter = new CountryFlagAdapter(flags, getContext());
+        CountryFlagAdapter flagAdapter = new CountryFlagAdapter(getContext(), flags, countryName -> {
+            String apiCountryName = FlagUtils.getCountryAPIName(countryName);
+
+            CountryMealListFragment fragment = new CountryMealListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("country_name", apiCountryName);
+            fragment.setArguments(bundle);
+
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
         flagRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        flagRecyclerView.setAdapter(adapter);
+        flagRecyclerView.setAdapter(flagAdapter);
     }
 
     @Override

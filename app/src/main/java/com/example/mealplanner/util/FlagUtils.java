@@ -42,6 +42,74 @@ public class FlagUtils {
 
         return countryFlags;
     }
+    public static String getCountryAPIName(String countryName) {
+        switch (countryName) {
+            case "Canada":
+                return "Canadian";
+            case "UK":
+                return "British";
+            case "USA":
+                return "American";
+            case "Turkey":
+                return "Turkish";
+            case "Japan":
+                return "Japanese";
+            case "China":
+                return "Chinese";
+            case "Germany":
+                return "German";
+            case "France":
+                return "French";
+            case "Italy":
+                return "Italian";
+            case "Greece":
+                return "Greek";
+            case "India":
+                return "Indian";
+            case "Ireland":
+                return "Irish";
+            case "Mexico":
+                return "Mexican";
+            case "Morocco":
+                return "Moroccan";
+            case "Philippines":
+                return "Filipino";
+            case "Poland":
+                return "Polish";
+            case "Portugal":
+                return "Portuguese";
+            case "Russia":
+                return "Russian";
+            case "Spain":
+                return "Spanish";
+            case "Thailand":
+                return "Thai";
+            case "Tunisia":
+                return "Tunisian";
+            case "Ukraine":
+                return "Ukrainian";
+            case "Uruguay":
+                return "Uruguayan";
+            case "Vietnam":
+                return "Vietnamese";
+            case "Croatia":
+                return "Croatian";
+            case "Netherlands":
+                return "Dutch";
+            case "Egypt":
+                return "Egyptian";
+            case "Kenya":
+                return "Kenyan";
+            case "Malaysia":
+                return "Malaysian";
+            case "Norway":
+                return "Norwegian";
+            default:
+                return countryName;
+        }
+    }
+
+
 }
 
 
