@@ -8,19 +8,15 @@
     android:gravity="center"
     android:padding="20dp">
 
-    <ImageView
-        android:layout_width="219dp"
-        android:layout_height="138dp"
-        android:src="@drawable/logo" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:textColor="@android:color/white"
-        android:textSize="42sp"
+        android:textSize="50dp"
         android:textStyle="bold"
-        android:layout_marginBottom="25dp"/>
+        android:fontFamily="@font/font3"
+        android:layout_marginBottom="30dp"/>
 
     <EditText
         android:id="@+id/userNameEditText"
@@ -28,15 +24,18 @@
         android:layout_height="50dp"
         android:background="@drawable/input_background"
         android:hint="User Name"
+        android:fontFamily="@font/font3"
         android:inputType="textPersonName"
+        android:textSize="18sp"
         android:textColor="@color/grey"
         android:textColorHint="@color/dark_grey"
+        android:gravity="start|center_vertical"
         android:drawableStart="@drawable/ic_user"
         android:drawablePadding="12dp"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
 
     <EditText
         android:id="@+id/emailEditText"
@@ -44,14 +43,17 @@
         android:layout_height="50dp"
         android:background="@drawable/input_background"
         android:hint="Email"
+        android:fontFamily="@font/font3"
         android:inputType="textEmailAddress"
+        android:textSize="18sp"
         android:textColor="@color/grey"
         android:textColorHint="@color/dark_grey"
+        android:gravity="start|center_vertical"
         android:drawableStart="@drawable/ic_email"
         android:drawablePadding="12dp"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -59,14 +61,17 @@
         android:layout_height="50dp"
         android:background="@drawable/input_background"
         android:hint="Password"
-        android:inputType="textPassword"
+        android:fontFamily="@font/font3"
+        android:inputType="numberPassword"
+        android:textSize="18sp"
         android:textColor="@color/grey"
         android:textColorHint="@color/dark_grey"
+        android:gravity="start|center_vertical"
         android:drawableStart="@drawable/ic_password"
         android:drawablePadding="12dp"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <EditText
         android:id="@+id/confirmPasswordEditText"
@@ -74,26 +79,30 @@
         android:layout_height="50dp"
         android:background="@drawable/input_background"
         android:hint="Confirm Password"
-        android:inputType="textPassword"
+        android:fontFamily="@font/font3"
+        android:inputType="numberPassword"
+        android:textSize="18sp"
         android:textColor="@color/grey"
         android:textColorHint="@color/dark_grey"
+        android:gravity="start|center_vertical"
         android:drawableStart="@drawable/ic_password"
         android:drawablePadding="12dp"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="30dp"/>
+
 
     <Button
         android:id="@+id/signUpButton"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
         android:background="@drawable/button_background"
+        android:fontFamily="@font/font3"
         android:text="Create Account"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-
+        android:textColor="#7A5BEF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center" />
 
 </LinearLayout>

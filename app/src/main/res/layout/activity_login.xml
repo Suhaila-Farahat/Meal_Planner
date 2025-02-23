@@ -7,84 +7,90 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="20dp">
-    <ImageView
-        android:layout_width="219dp"
-        android:layout_height="138dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="15dp"
+        android:fontFamily="@font/font3"
         android:text="Login"
         android:textColor="@android:color/white"
-        android:textSize="42sp"
+        android:textSize="50dp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/emailEditTextLogin"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="15dp"
         android:background="@drawable/input_background"
-        android:drawableStart="@drawable/ic_email"
-        android:drawablePadding="12dp"
         android:hint="Email"
+        android:fontFamily="@font/font3"
         android:inputType="textEmailAddress"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:textColor="@color/grey"
-        android:textColorHint="@color/dark_grey" />
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/input_background"
-        android:hint="password"
-        android:inputType="textPassword"
+        android:textSize="18sp"
         android:textColor="@color/grey"
         android:textColorHint="@color/dark_grey"
+        android:gravity="start|center_vertical"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="12dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"/>
+
+    <EditText
+        android:id="@+id/passwordEditTextLogin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/input_background"
+        android:hint="Password"
+        android:fontFamily="@font/font3"
+        android:inputType="numberPassword"
+        android:textSize="18sp"
+        android:textColor="@color/grey"
+        android:textColorHint="@color/dark_grey"
+        android:gravity="start|center_vertical"
         android:drawableStart="@drawable/ic_password"
         android:drawablePadding="12dp"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
-        android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:id="@+id/loginButton"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="20dp"
         android:background="@drawable/button_background"
+        android:fontFamily="@font/font3"
         android:text="Login"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textColor="#7A5BEF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="25dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Already have an account ?"
+            android:text="Don't have an account? "
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:fontFamily="@font/font3"
+            android:textSize="22sp" />
 
         <Button
-            android:id="@+id/loginButton"
+            android:id="@+id/signUpTextButtonLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:text="Sign Up"
-            android:textColor="#52299B"
-            android:textSize="18sp"
+            android:fontFamily="@font/font3"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
             android:textStyle="bold" />
     </LinearLayout>
-
 </LinearLayout>

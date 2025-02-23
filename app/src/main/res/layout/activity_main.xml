@@ -17,17 +17,18 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="85dp"
-        android:background="@color/category_background2"
+        android:background="#7A5BEF "
         app:itemIconSize="38dp"
-        app:itemIconTint="#009688"
+        app:itemIconTint="#F2EEEE"
         app:itemTextAppearanceActive="@style/BottomNavTextStyle"
         app:itemTextAppearanceInactive="@style/BottomNavTextStyle"
-        app:itemTextColor="#009688"
+        app:itemTextColor="#F2EEEE "
         app:labelVisibilityMode="selected"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@drawable/bottom_nav_menu" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
