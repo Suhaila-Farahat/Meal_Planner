@@ -16,38 +16,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+//
+//        bottomNavigationView.setOnItemSelectedListener(item -> {
+//            Fragment selectedFragment = null;
+//            int itemId = item.getItemId();
+//
+//            if (itemId == R.id.nav_home) {
+//                selectedFragment = new HomeFragment();
+//            } else if (itemId == R.id.nav_search) {
+//                selectedFragment = new SearchFragment();
+//            } else if (itemId == R.id.nav_favorites) {
+//                selectedFragment = new FavoritesFragment();
+//            } else if (itemId == R.id.nav_calender) {
+//                selectedFragment = new CalendarFragment();
+//            } else if (itemId == R.id.nav_profile) {
+//                selectedFragment = new ProfileFragment();
+//            }
+//
+//            if (selectedFragment != null) {
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.fragment_container, selectedFragment)
+//                        .commit();
+//            }
+//            return true;
+//        });
+//
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragment_container, new HomeFragment())
+//                    .commit();
+//        }
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
-            int itemId = item.getItemId();
 
-            if (itemId == R.id.nav_home) {
-                selectedFragment = new HomeFragment();
-            } else if (itemId == R.id.nav_search) {
-                selectedFragment = new SearchFragment();
-            } else if (itemId == R.id.nav_favorites) {
-                selectedFragment = new FavoritesFragment();
-            } else if (itemId == R.id.nav_calender) {
-                selectedFragment = new CalendarFragment();
-            } else if (itemId == R.id.nav_profile) {
-                selectedFragment = new ProfileFragment();
-            }
 
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, selectedFragment)
-                        .commit();
-            }
-            return true;
-        });
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment())
-                    .commit();
-        }
     }
 }
