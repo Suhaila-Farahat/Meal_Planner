@@ -2,8 +2,8 @@ package com.example.mealplanner.categories.presenter;
 
 import android.annotation.SuppressLint;
 import com.example.mealplanner.categories.view.MealListView;
+import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Meal;
-import com.example.mealplanner.network.RemoteDataSource;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -11,19 +11,21 @@ import java.util.List;
 
 public class MealListPresenterImp implements MealListPresenter {
     private MealListView view;
-    private final RemoteDataSource remoteDataSource;
+    private final MealRepository mealRepository;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public MealListPresenterImp(MealListView view) {
+    public MealListPresenterImp(MealListView view, MealRepository mealRepository) {
         this.view = view;
-        this.remoteDataSource = RemoteDataSource.getInstance();
+        this.mealRepository = mealRepository;
     }
 
     @SuppressLint("CheckResult")
     @Override
     public void fetchMeals(String categoryName) {
+        if (view == null) return;
+
         compositeDisposable.add(
-                remoteDataSource.getFilteredMealsByCategory(categoryName)
+                mealRepository.getFilteredMealsByCategory(categoryName)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -41,7 +43,8 @@ public class MealListPresenterImp implements MealListPresenter {
                         )
         );
     }
-@Override
+
+    @Override
     public void onDestroy() {
         compositeDisposable.clear();
         view = null;

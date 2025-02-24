@@ -17,10 +17,11 @@ import com.example.mealplanner.categories.presenter.MealListPresenter;
 import com.example.mealplanner.categories.presenter.MealListPresenterImp;
 import com.example.mealplanner.database.AppDatabase;
 import com.example.mealplanner.database.FavoriteMealDao;
+import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.view.MealDetailsFragment;
+import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Meal;
-
-import java.util.ArrayList;
+import com.example.mealplanner.network.RemoteDataSource;
 import java.util.List;
 
 public class MealListFragment extends Fragment implements MealListView {
@@ -43,16 +44,13 @@ public class MealListFragment extends Fragment implements MealListView {
         adapter = new MealListAdapter(
                 meal -> navigateToMealDetails(meal),
                 favoriteMealDao,
-                new MealListAdapter.OnFavoriteChangedListener() {
-                    @Override
-                    public void onFavoriteChanged() {
-                    }
-                }
+                () -> {}
         );
 
         recyclerView.setAdapter(adapter);
 
-        presenter = new MealListPresenterImp(this);
+        MealRepository mealRepository = new MealRepository(RemoteDataSource.getInstance(), LocalDataSource.getInstance(AppDatabase.getInstance(getContext()).favoriteMealDao()));
+        presenter = new MealListPresenterImp(this, mealRepository);
 
         if (getArguments() != null) {
             String categoryName = getArguments().getString("category_name");
@@ -77,12 +75,10 @@ public class MealListFragment extends Fragment implements MealListView {
         adapter.setMeals(meals);
     }
 
-
     @Override
     public void showError(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void navigateToMealDetails(Meal meal) {

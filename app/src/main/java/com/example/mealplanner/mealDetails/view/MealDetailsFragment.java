@@ -19,20 +19,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.mealplanner.Ingredient.view.IngredientSelectionFragment;
 import com.example.mealplanner.R;
+import com.example.mealplanner.database.AppDatabase;
+import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenter;
+import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenterImpl;
+import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Ingredient;
 import com.example.mealplanner.models.mealModel.MealDetails;
-import com.example.mealplanner.network.MealApiService;
-import com.example.mealplanner.network.RetrofitClient;
+import com.example.mealplanner.network.RemoteDataSource;
 
 import java.util.List;
 
 public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
     private MealDetailsPresenter mealDetailsPresenter;
-    private TextView mealName, mealArea, mealInstructions, noVideoText, selectIngredientsText;
+    private TextView mealName, mealArea, mealInstructions, noVideoText;
     private ImageView mealImage;
     private WebView videoWebView;
     private RecyclerView ingredientRecyclerView;
@@ -54,8 +56,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
         ingredientRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        MealApiService mealApiService = RetrofitClient.getInstance().create(MealApiService.class);
-        mealDetailsPresenter = new MealDetailsPresenter(this, mealApiService);
+        mealDetailsPresenter = new MealDetailsPresenterImpl(this, MealRepository.getInstance(RemoteDataSource.getInstance(), LocalDataSource.getInstance(AppDatabase.getInstance(getContext()).favoriteMealDao())));
 
         String mealId = getArguments() != null ? getArguments().getString("mealId") : null;
 
@@ -132,5 +133,11 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mealDetailsPresenter.onDestroy();
     }
 }

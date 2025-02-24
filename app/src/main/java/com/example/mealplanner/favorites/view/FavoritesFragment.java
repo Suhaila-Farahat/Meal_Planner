@@ -6,16 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.mealplanner.R;
 import com.example.mealplanner.database.AppDatabase;
 import com.example.mealplanner.database.FavoriteMeal;
+import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.favorites.presenter.FavoritePresenter;
 import com.example.mealplanner.favorites.presenter.FavoritePresenterImpl;
+import com.example.mealplanner.models.MealRepository;
+import com.example.mealplanner.network.RemoteDataSource;
+
 import java.util.List;
 
 public class FavoritesFragment extends Fragment implements FavoritesView {
@@ -33,10 +39,12 @@ public class FavoritesFragment extends Fragment implements FavoritesView {
         recyclerView = view.findViewById(R.id.recycler_favorites);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        presenter = new FavoritePresenterImpl(
-                this,
-                AppDatabase.getInstance(getContext()).favoriteMealDao()
+        MealRepository repository = MealRepository.getInstance(
+                RemoteDataSource.getInstance(),
+                new LocalDataSource(AppDatabase.getInstance(getContext()).favoriteMealDao())
         );
+
+        presenter = new FavoritePresenterImpl(this, repository);
 
         adapter = new FavoritesAdapter(presenter);
         recyclerView.setAdapter(adapter);

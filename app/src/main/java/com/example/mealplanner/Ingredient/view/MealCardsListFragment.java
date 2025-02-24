@@ -11,10 +11,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.mealplanner.Ingredient.presenter.MealCardsListPresenter;
+import com.example.mealplanner.Ingredient.presenter.MealCardsListPresenterImpl;
 import com.example.mealplanner.R;
+import com.example.mealplanner.database.AppDatabase;
+import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.view.MealDetailsFragment;
+import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Meal;
+import com.example.mealplanner.network.RemoteDataSource;
+
 import java.util.List;
 
 public class MealCardsListFragment extends Fragment implements MealCardsListView {
@@ -32,7 +39,9 @@ public class MealCardsListFragment extends Fragment implements MealCardsListView
 
         if (getArguments() != null) {
             ingredientName = getArguments().getString("ingredientName");
-            presenter = new MealCardsListPresenter(this);
+
+            MealRepository mealRepository = new MealRepository(RemoteDataSource.getInstance(), LocalDataSource.getInstance(AppDatabase.getInstance(getContext()).favoriteMealDao()));
+            presenter = new MealCardsListPresenterImpl(this, mealRepository);
             presenter.fetchMealsByIngredient(ingredientName);
         }
 
@@ -41,7 +50,7 @@ public class MealCardsListFragment extends Fragment implements MealCardsListView
 
     @Override
     public void showMeals(List<Meal> meals) {
-        MealAdapter adapter = new MealAdapter(meals, meal -> navigateToMealDetails(meal));
+        MealAdapter adapter = new MealAdapter(meals, this::navigateToMealDetails);
         mealRecyclerView.setAdapter(adapter);
     }
 

@@ -1,26 +1,28 @@
 package com.example.mealplanner.favorites.presenter;
 
 import android.annotation.SuppressLint;
+
 import com.example.mealplanner.database.FavoriteMeal;
-import com.example.mealplanner.database.FavoriteMealDao;
 import com.example.mealplanner.favorites.view.FavoritesView;
+import com.example.mealplanner.models.MealRepository;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FavoritePresenterImpl implements FavoritePresenter {
     private FavoritesView view;
-    private FavoriteMealDao favoriteMealDao;
+    private MealRepository repository;
     private CompositeDisposable disposable = new CompositeDisposable();
 
-    public FavoritePresenterImpl(FavoritesView view, FavoriteMealDao favoriteMealDao) {
+    public FavoritePresenterImpl(FavoritesView view, MealRepository repository) {
         this.view = view;
-        this.favoriteMealDao = favoriteMealDao;
+        this.repository = repository;
     }
 
     @Override
     public void loadFavorites() {
-        disposable.add(favoriteMealDao.getAllFavorites()
+        disposable.add(repository.getAllFavoriteMeals()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -32,18 +34,18 @@ public class FavoritePresenterImpl implements FavoritePresenter {
     @SuppressLint("CheckResult")
     @Override
     public void toggleFavorite(FavoriteMeal meal) {
-        disposable.add(favoriteMealDao.isMealFavorite(meal.getId())
+        disposable.add(repository.isMealFavorite(meal.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isFavorite -> {
                     if (isFavorite) {
-                        disposable.add(favoriteMealDao.deleteFavorite(meal.getId())
+                        disposable.add(repository.removeMealFromFavorites(meal.getId())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(() -> view.showFavoriteRemoved(meal),
                                         throwable -> view.showError(throwable.getMessage())));
                     } else {
-                        disposable.add(favoriteMealDao.insertFavorite(meal)
+                        disposable.add(repository.addMealToFavorites(meal)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(() -> view.showFavoriteAdded(meal),
@@ -54,7 +56,7 @@ public class FavoritePresenterImpl implements FavoritePresenter {
 
     @Override
     public void checkIfFavorite(String mealId) {
-        disposable.add(favoriteMealDao.isMealFavorite(mealId)
+        disposable.add(repository.isMealFavorite(mealId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isFavorite -> view.onFavoriteChecked(isFavorite),

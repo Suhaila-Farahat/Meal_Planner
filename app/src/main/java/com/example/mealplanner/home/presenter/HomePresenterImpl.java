@@ -5,7 +5,6 @@ import com.example.mealplanner.models.flagsModel.CountryFlag;
 import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.responses.MealResponse;
 import com.example.mealplanner.models.responses.CategoryResponse;
-import com.example.mealplanner.network.RemoteDataSource;
 import com.example.mealplanner.util.FlagUtils;
 import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -18,9 +17,9 @@ public class HomePresenterImpl implements HomePresenter {
     private final MealRepository mealRepository;
     private final AllMealsView IView;
 
-    public HomePresenterImpl(AllMealsView allMealsView) {
-        this.mealRepository = MealRepository.getInstance(RemoteDataSource.getInstance());
+    public HomePresenterImpl(AllMealsView allMealsView, MealRepository mealRepository) {
         this.IView = allMealsView;
+        this.mealRepository = mealRepository;
     }
 
     @Override
