@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mealplanner.MainActivity;
 import com.example.mealplanner.R;
-import com.example.mealplanner.StartActivity;
-import com.example.mealplanner.auth.login.view.LoginActivity;
-import com.example.mealplanner.auth.signup.view.SignUpActivity;
+import com.example.mealplanner.start.StartActivity;
 
 import android.os.Handler;
 

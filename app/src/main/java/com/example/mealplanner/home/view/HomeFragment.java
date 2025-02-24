@@ -37,7 +37,6 @@ public class HomeFragment extends Fragment implements AllMealsView {
     private RecyclerView categoryRecyclerView, flagRecyclerView;
     private HomePresenter homePresenter;
 
-    public HomeFragment() {}
 
     @Nullable
     @Override

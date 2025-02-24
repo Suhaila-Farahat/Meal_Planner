@@ -7,4 +7,5 @@ public interface MealListView {
     void showMeals(List<Meal> meals);
 
     void showError(String message);
+    void  navigateToMealDetails (Meal meal);
 }
