@@ -1,6 +1,7 @@
 package com.example.mealplanner.categories.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealplanner.R;
 import com.example.mealplanner.categories.presenter.MealListPresenter;
+import com.example.mealplanner.database.AppDatabase;
+import com.example.mealplanner.database.FavoriteMealDao;
 import com.example.mealplanner.mealDetails.view.MealDetailsFragment;
 import com.example.mealplanner.models.mealModel.Meal;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MealListFragment extends Fragment implements MealListView {
@@ -32,7 +37,18 @@ public class MealListFragment extends Fragment implements MealListView {
         recyclerView = view.findViewById(R.id.meal_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new MealListAdapter(meal -> navigateToMealDetails(meal));
+        FavoriteMealDao favoriteMealDao = AppDatabase.getInstance(getContext()).favoriteMealDao();
+
+        adapter = new MealListAdapter(
+                meal -> navigateToMealDetails(meal),
+                favoriteMealDao,
+                new MealListAdapter.OnFavoriteChangedListener() {
+                    @Override
+                    public void onFavoriteChanged() {
+                    }
+                }
+        );
+
         recyclerView.setAdapter(adapter);
 
         presenter = new MealListPresenter(this);
@@ -47,8 +63,19 @@ public class MealListFragment extends Fragment implements MealListView {
 
     @Override
     public void showMeals(List<Meal> meals) {
+        if (adapter == null) {
+            Log.e("MealListFragment", "Adapter is null when calling showMeals! Initializing adapter again.");
+            FavoriteMealDao favoriteMealDao = AppDatabase.getInstance(getContext()).favoriteMealDao();
+            adapter = new MealListAdapter(
+                    meal -> navigateToMealDetails(meal),
+                    favoriteMealDao,
+                    () -> {}
+            );
+            recyclerView.setAdapter(adapter);
+        }
         adapter.setMeals(meals);
     }
+
 
     @Override
     public void showError(String message) {

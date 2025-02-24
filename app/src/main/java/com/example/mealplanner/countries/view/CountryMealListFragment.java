@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,15 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealplanner.R;
 import com.example.mealplanner.countries.presenter.CountryMealListPresenter;
+import com.example.mealplanner.database.AppDatabase;
+import com.example.mealplanner.database.FavoriteMealDao;
 import com.example.mealplanner.mealDetails.view.MealDetailsFragment;
 import com.example.mealplanner.models.mealModel.Meal;
 import java.util.List;
-
 public class CountryMealListFragment extends Fragment implements CountryMealListView, CountryMealListAdapter.OnMealClickListener {
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
     private CountryMealListPresenter presenter;
     private CountryMealListAdapter adapter;
+    private FavoriteMealDao favoriteMealDao;
 
     public CountryMealListFragment() {}
 
@@ -33,7 +33,8 @@ public class CountryMealListFragment extends Fragment implements CountryMealList
         recyclerView = view.findViewById(R.id.meal_recycler_view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CountryMealListAdapter(getContext(), this);
+        favoriteMealDao = AppDatabase.getInstance(getContext()).favoriteMealDao();
+        adapter = new CountryMealListAdapter(getContext(), this, favoriteMealDao);
         recyclerView.setAdapter(adapter);
 
         presenter = new CountryMealListPresenter(this);
@@ -55,8 +56,6 @@ public class CountryMealListFragment extends Fragment implements CountryMealList
     public void showError(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
-
-
 
     @Override
     public void onMealClick(String mealId) {

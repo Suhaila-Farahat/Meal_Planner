@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/mealcard_image"
+            android:id="@+id/favorite_meal_image"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
@@ -24,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
-            android:id="@+id/mealcard_name"
+            android:id="@+id/favorite_meal_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Meal Name"
@@ -34,12 +34,12 @@
             android:gravity="center"
             android:padding="8dp"
             android:background="@drawable/text_background"
-            app:layout_constraintBottom_toBottomOf="@id/mealcard_image"
+            app:layout_constraintBottom_toBottomOf="@id/favorite_meal_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <ImageButton
-            android:id="@+id/mealcard_fav_button"
+            android:id="@+id/favorite_meal_button"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="12dp"

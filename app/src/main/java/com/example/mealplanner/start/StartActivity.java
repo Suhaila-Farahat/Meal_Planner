@@ -1,4 +1,4 @@
-package com.example.mealplanner;
+package com.example.mealplanner.start;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mealplanner.MainActivity;
+import com.example.mealplanner.R;
+import com.example.mealplanner.auth.login.view.LoginActivity;
 import com.example.mealplanner.auth.signup.view.SignUpActivity;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.SignInClient;
@@ -38,7 +41,7 @@ public class StartActivity extends AppCompatActivity {
         Button btnGuest = findViewById(R.id.btn_guest);
 
         btnSignUpEmail.setOnClickListener(view -> {
-            Intent intent = new Intent(StartActivity.this, SignUpActivity.class);
+            Intent intent = new Intent(StartActivity.this, LoginActivity.class);
             startActivity(intent);
         });
 

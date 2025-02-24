@@ -57,7 +57,7 @@
                 android:layout_height="60dp"
                 android:backgroundTint="#3B0C5B"
                 android:textColor="@android:color/white"
-                android:text="Sign Up With Email"
+                android:text="Login With Email"
                 android:gravity="center"
                 android:drawableStart="@drawable/icon_email"
                 android:drawablePadding="10dp"
