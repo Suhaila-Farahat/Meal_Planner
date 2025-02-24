@@ -1,33 +1,31 @@
 package com.example.mealplanner.Ingredient.presenter;
 
-
+import android.annotation.SuppressLint;
 import com.example.mealplanner.Ingredient.view.IngredientSelectionView;
-import com.example.mealplanner.network.MealApiService;
-
+import com.example.mealplanner.models.MealRepository;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class IngredientSelectionPresenterImpl implements IngredientSelectionPresenter {
 
-    private IngredientSelectionView view;
-    private MealApiService apiService;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final IngredientSelectionView view;
+    private final MealRepository mealRepository;
 
-    public IngredientSelectionPresenterImpl(IngredientSelectionView view, MealApiService apiService) {
+    public IngredientSelectionPresenterImpl(IngredientSelectionView view, MealRepository mealRepository) {
         this.view = view;
-        this.apiService = apiService;
+        this.mealRepository = mealRepository;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void fetchIngredients() {
-        compositeDisposable.add(apiService.getIngredients()
+        Single.fromCallable(() -> mealRepository.getIngredients().blockingGet())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        response -> view.showIngredients(response.getIngredients()),
+                        ingredientsResponse -> view.showIngredients(ingredientsResponse.getIngredients()),
                         throwable -> view.showError("Failed to load ingredients: " + throwable.getMessage())
-                ));
+                );
     }
 }
-

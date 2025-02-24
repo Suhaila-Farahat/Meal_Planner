@@ -12,12 +12,18 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.mealplanner.Ingredient.presenter.MealCardsListPresenter;
+import com.example.mealplanner.Ingredient.presenter.MealCardsListPresenterImpl;
 import com.example.mealplanner.R;
+import com.example.mealplanner.database.AppDatabase;
+import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.view.MealDetailsFragment;
+import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Meal;
+import com.example.mealplanner.network.RemoteDataSource;
 import java.util.List;
 
 public class MealCardsListFragment extends Fragment implements MealCardsListView {
+
     private RecyclerView mealRecyclerView;
     private MealCardsListPresenter presenter;
     private String ingredientName;
@@ -26,23 +32,31 @@ public class MealCardsListFragment extends Fragment implements MealCardsListView
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meal_list, container, false);
+        initializeUI(view);
+        fetchMeals();
+        return view;
+    }
 
+    private void initializeUI(View view) {
         mealRecyclerView = view.findViewById(R.id.meal_recycler_view);
         mealRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
 
+    private void fetchMeals() {
         if (getArguments() != null) {
             ingredientName = getArguments().getString("ingredientName");
-            presenter = new MealCardsListPresenter(this);
+            MealRepository mealRepository =  MealRepository.getInstance(
+                    RemoteDataSource.getInstance(),
+                    LocalDataSource.getInstance(getContext())
+            );
+            presenter = new MealCardsListPresenterImpl(this, mealRepository);
             presenter.fetchMealsByIngredient(ingredientName);
         }
-
-        return view;
     }
 
     @Override
     public void showMeals(List<Meal> meals) {
-        MealAdapter adapter = new MealAdapter(meals, meal -> navigateToMealDetails(meal));
-        mealRecyclerView.setAdapter(adapter);
+        mealRecyclerView.setAdapter(new MealAdapter(meals, this::navigateToMealDetails));
     }
 
     private void navigateToMealDetails(Meal meal) {

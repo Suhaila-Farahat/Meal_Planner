@@ -11,28 +11,27 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.example.mealplanner.Ingredient.view.IngredientSelectionFragment;
 import com.example.mealplanner.R;
+import com.example.mealplanner.database.AppDatabase;
+import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenter;
+import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenterImpl;
+import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Ingredient;
 import com.example.mealplanner.models.mealModel.MealDetails;
-import com.example.mealplanner.network.MealApiService;
-import com.example.mealplanner.network.RetrofitClient;
-
+import com.example.mealplanner.network.RemoteDataSource;
 import java.util.List;
 
 public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
     private MealDetailsPresenter mealDetailsPresenter;
-    private TextView mealName, mealArea, mealInstructions, noVideoText, selectIngredientsText;
+    private TextView mealName, mealArea, mealInstructions, noVideoText;
     private ImageView mealImage;
     private WebView videoWebView;
     private RecyclerView ingredientRecyclerView;
@@ -42,7 +41,13 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meal_details, container, false);
+        initializeViews(view);
+        setupPresenter();
+        loadMealDetails();
+        return view;
+    }
 
+    private void initializeViews(View view) {
         mealName = view.findViewById(R.id.mealName);
         mealArea = view.findViewById(R.id.mealArea);
         mealInstructions = view.findViewById(R.id.mealInstructions);
@@ -53,49 +58,62 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         progressBar = view.findViewById(R.id.progressBar);
 
         ingredientRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+    }
 
-        MealApiService mealApiService = RetrofitClient.getInstance().create(MealApiService.class);
-        mealDetailsPresenter = new MealDetailsPresenter(this, mealApiService);
+    private void setupPresenter() {
+        mealDetailsPresenter = new MealDetailsPresenterImpl(
+                this,
+                MealRepository.getInstance(
+                        RemoteDataSource.getInstance(),
+                        LocalDataSource.getInstance(getContext())
+                )
+        );
+    }
 
+    private void loadMealDetails() {
         String mealId = getArguments() != null ? getArguments().getString("mealId") : null;
-
         if (mealId != null) {
             mealDetailsPresenter.fetchMealDetails(mealId);
         } else {
             showError("Meal ID is missing");
         }
-
-        return view;
     }
 
     @Override
     public void showMealDetails(MealDetails mealDetails) {
         hideLoading();
-
         mealName.setText(mealDetails.getStrMeal());
         mealArea.setText(mealDetails.getStrArea());
         mealInstructions.setText(mealDetails.getStrInstructions());
-
         Glide.with(this).load(mealDetails.getStrMealThumb()).into(mealImage);
 
-        List<Ingredient> ingredients = mealDetails.getIngredients();
+        setupIngredientAdapter(mealDetails.getIngredients());
+        handleVideoPlayback(mealDetails.getStrYoutube());
+    }
+
+    private void setupIngredientAdapter(List<Ingredient> ingredients) {
         IngredientAdapter ingredientAdapter = new IngredientAdapter(getContext(), ingredients);
         ingredientRecyclerView.setAdapter(ingredientAdapter);
+    }
 
-        if (mealDetails.getStrYoutube() != null && !mealDetails.getStrYoutube().isEmpty()) {
-            String videoId = extractYoutubeId(mealDetails.getStrYoutube());
+    private void handleVideoPlayback(String youtubeUrl) {
+        if (youtubeUrl != null && !youtubeUrl.isEmpty()) {
+            String videoId = extractYoutubeId(youtubeUrl);
             if (videoId != null) {
                 videoWebView.setVisibility(View.VISIBLE);
                 noVideoText.setVisibility(View.GONE);
                 loadYoutubeVideo(videoId);
             } else {
-                videoWebView.setVisibility(View.GONE);
-                noVideoText.setVisibility(View.VISIBLE);
+                showNoVideoAvailable();
             }
         } else {
-            videoWebView.setVisibility(View.GONE);
-            noVideoText.setVisibility(View.VISIBLE);
+            showNoVideoAvailable();
         }
+    }
+
+    private void showNoVideoAvailable() {
+        videoWebView.setVisibility(View.GONE);
+        noVideoText.setVisibility(View.VISIBLE);
     }
 
     private void loadYoutubeVideo(String videoId) {
@@ -132,5 +150,11 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mealDetailsPresenter.onDestroy();
     }
 }

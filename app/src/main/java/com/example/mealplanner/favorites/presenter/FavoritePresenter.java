@@ -6,5 +6,4 @@ public interface FavoritePresenter {
     void loadFavorites();
     void toggleFavorite(FavoriteMeal meal);
     void checkIfFavorite(String mealId);
-    void onDestroy();
 }

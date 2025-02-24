@@ -52,7 +52,6 @@ public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealList
         holder.mealName.setText(meal.getName());
         Glide.with(context).load(meal.getImageUrl()).into(holder.mealImage);
 
-        // Check if this meal is a favorite
         disposable.add(favoriteMealDao.isMealFavorite(meal.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

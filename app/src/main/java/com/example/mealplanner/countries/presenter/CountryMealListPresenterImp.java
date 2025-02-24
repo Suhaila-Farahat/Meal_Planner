@@ -1,30 +1,31 @@
 package com.example.mealplanner.countries.presenter;
 
-
 import android.annotation.SuppressLint;
-
 import com.example.mealplanner.countries.view.CountryMealListView;
+import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Meal;
-import com.example.mealplanner.network.RemoteDataSource;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.List;
 
-public class CountryMealListPresenterImpl implements CountryMealListPresenter{
+public class CountryMealListPresenterImp implements CountryMealListPresenter {
     private CountryMealListView view;
-    private final RemoteDataSource remoteDataSource;
+    private final MealRepository mealRepository;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public CountryMealListPresenterImpl(CountryMealListView view) {
+    public CountryMealListPresenterImp(CountryMealListView view, MealRepository mealRepository) {
         this.view = view;
-        this.remoteDataSource = RemoteDataSource.getInstance();
+        this.mealRepository = mealRepository;
     }
-    @Override
+
     @SuppressLint("CheckResult")
+    @Override
     public void fetchMealsByCountry(String countryName) {
+        if (view == null) return;
+
         compositeDisposable.add(
-                remoteDataSource.getFilteredMealsByCountry(countryName)
+                mealRepository.getFilteredMealsByCountry(countryName)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
@@ -36,16 +37,14 @@ public class CountryMealListPresenterImpl implements CountryMealListPresenter{
                                         view.showError("No meals found for this country!");
                                     }
                                 },
-                                throwable -> {
-                                    view.showError("Failed to load meals: " + throwable.getMessage());
-                                }
+                                throwable -> view.showError("Failed to load meals: " + throwable.getMessage())
                         )
         );
     }
+
     @Override
     public void onDestroy() {
         compositeDisposable.clear();
         view = null;
     }
 }
-
