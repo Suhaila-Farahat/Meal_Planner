@@ -46,9 +46,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-
-
+    
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("io.reactivex.rxjava3:rxjava:3.1.6")
@@ -60,13 +58,13 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
 
     implementation ("com.airbnb.android:lottie:6.0.0")
-
-
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.firebase:firebase-analytics")
 
-
-
-
+    implementation ("com.google.android.gms:play-services-auth:20.7.0")
+    dependencies {
+        implementation ("com.google.firebase:firebase-auth:22.1.2")
+        implementation ("com.google.android.gms:play-services-auth:20.7.0")
+    }
 
 }

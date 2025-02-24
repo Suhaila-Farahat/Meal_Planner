@@ -16,7 +16,7 @@ import com.example.mealplanner.auth.signup.view.SignUpActivity;
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
     private EditText email, password;
-    private Button login, signUpButton;
+    private Button loginBtn, signUpTextButton;
     private LoginPresenter presenter;
 
     @SuppressLint("MissingInflatedId")
@@ -27,18 +27,18 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         email = findViewById(R.id.emailEditTextLogin);
         password = findViewById(R.id.passwordEditTextLogin);
-        login = findViewById(R.id.loginButton);
-        signUpButton = findViewById(R.id.signUpTextButtonLogin);
+        loginBtn = findViewById(R.id.loginButton);
+        signUpTextButton = findViewById(R.id.signUpTextButtonLogin);
 
         presenter = new LoginPresenterImpl(this);
 
-        login.setOnClickListener(v -> {
+        loginBtn.setOnClickListener(v -> {
             String emailStr = email.getText().toString().trim();
             String passStr = password.getText().toString().trim();
             presenter.login(emailStr, passStr);
         });
 
-        signUpButton.setOnClickListener(v -> {
+        signUpTextButton.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
             startActivity(intent);
         });
