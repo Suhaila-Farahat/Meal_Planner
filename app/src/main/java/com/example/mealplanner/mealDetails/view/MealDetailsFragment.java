@@ -1,7 +1,7 @@
 package com.example.mealplanner.mealDetails.view;
 
 import android.app.AlertDialog;
-import android.content.Context;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,16 +15,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
 import com.example.mealplanner.SessionManager;
 import com.example.mealplanner.auth.login.view.LoginActivity;
-import com.example.mealplanner.auth.signup.view.SignUpActivity;
 import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenter;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenterImpl;
@@ -33,6 +34,9 @@ import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Ingredient;
 import com.example.mealplanner.models.mealModel.MealDetails;
 import com.example.mealplanner.network.RemoteDataSource;
+import com.example.mealplanner.start.view.StartActivity;
+
+import java.util.Calendar;
 import java.util.List;
 
 public class MealDetailsFragment extends Fragment implements MealDetailsView {
@@ -102,17 +106,42 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
             if (sessionManager.isGuest()) {
                 showSignUpDialog();
             } else {
-                if (mealId != null) {
-                    PlannedMeal plannedMeal = new PlannedMeal();
-                    plannedMeal.setMealId(mealId);
-                    plannedMeal.setMealName(mealTitle);
-                    plannedMeal.setMealImage(mealImageUrl);
-                    plannedMeal.setPlannedDate(System.currentTimeMillis());
-
-                    mealDetailsPresenter.scheduleMeal(plannedMeal);
-                }
+                showDatePickerDialog();
             }
         });
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                (view, year1, month1, dayOfMonth1) -> {
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.set(year1, month1, dayOfMonth1);
+
+                    saveMealToCalendar(selectedDate.getTimeInMillis());
+                }, year, month, dayOfMonth);
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+
+
+        datePickerDialog.show();
+    }
+
+    private void saveMealToCalendar(long plannedDate) {
+        if (mealId != null) {
+            PlannedMeal plannedMeal = new PlannedMeal();
+            plannedMeal.setMealId(mealId);
+            plannedMeal.setMealName(mealTitle);
+            plannedMeal.setMealImage(mealImageUrl);
+            plannedMeal.setPlannedDate(plannedDate);
+
+            mealDetailsPresenter.scheduleMeal(plannedMeal);
+
+            showMessage("Meal added to calendar!");
+        }
     }
 
     @Override
@@ -177,8 +206,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     private void showSignUpDialog() {
         new AlertDialog.Builder(getContext())
                 .setMessage("Only registered users can add meals to the Calendar")
-                .setPositiveButton("Login", (dialog, which) -> {
-                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                .setPositiveButton("Sign Up", (dialog, which) -> {
+                    Intent intent = new Intent(getContext(), StartActivity.class);
                     startActivity(intent);
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())

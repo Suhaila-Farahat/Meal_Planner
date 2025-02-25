@@ -12,6 +12,7 @@ import com.example.mealplanner.home.view.HomeFragment;
 import com.example.mealplanner.mealplanning.view.CalendarPlannedFragment;
 import com.example.mealplanner.search.view.SearchFragment;
 import com.example.mealplanner.auth.signup.view.SignUpActivity;
+import com.example.mealplanner.start.view.StartActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Limited Access")
                 .setMessage("Sign up to unlock Favorites, Calendar, and Profile features!")
-                .setPositiveButton("Login", (dialog, which) -> {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                .setPositiveButton("Sign Up", (dialog, which) -> {
+                    startActivity(new Intent(MainActivity.this, StartActivity.class));
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
