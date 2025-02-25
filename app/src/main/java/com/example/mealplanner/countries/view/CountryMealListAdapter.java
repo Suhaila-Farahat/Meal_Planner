@@ -1,6 +1,7 @@
 package com.example.mealplanner.countries.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,15 +9,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
+import com.example.mealplanner.SessionManager;
+import com.example.mealplanner.auth.login.view.LoginActivity;
+import com.example.mealplanner.auth.signup.view.SignUpActivity;
 import com.example.mealplanner.database.FavoriteMeal;
 import com.example.mealplanner.database.FavoriteMealDao;
 import com.example.mealplanner.models.mealModel.Meal;
 import java.util.ArrayList;
 import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -27,11 +31,13 @@ public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealList
     private OnMealClickListener mealClickListener;
     private FavoriteMealDao favoriteMealDao;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private SessionManager sessionManager;
 
     public CountryMealListAdapter(Context context, OnMealClickListener mealClickListener, FavoriteMealDao favoriteMealDao) {
         this.context = context;
         this.mealClickListener = mealClickListener;
         this.favoriteMealDao = favoriteMealDao;
+        this.sessionManager = new SessionManager(context);
     }
 
     public void setMeals(List<Meal> meals) {
@@ -60,6 +66,11 @@ public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealList
                 }));
 
         holder.favButton.setOnClickListener(v -> {
+            if (sessionManager.isGuest()) {
+                showSignUpDialog();
+                return;
+            }
+
             if (holder.favButton.getDrawable().getConstantState().equals(context.getDrawable(R.drawable.ic_favorite).getConstantState())) {
                 removeMealFromFavorites(meal);
             } else {
@@ -87,6 +98,18 @@ public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealList
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> notifyDataSetChanged()));
+    }
+
+    private void showSignUpDialog() {
+        new AlertDialog.Builder(context)
+                .setTitle("Sign Up Required")
+                .setMessage("Only registered users can add meals to favorites. Sign up now!")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    context.startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     @Override

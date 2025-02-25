@@ -53,38 +53,32 @@
 
             <Button
                 android:id="@+id/btn_signup_email"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="60dp"
-                android:backgroundTint="#3B0C5B"
+                android:backgroundTint="#6E408E"
                 android:textColor="@android:color/white"
                 android:text="Sign Up With Email"
-                android:gravity="center"
                 android:drawableStart="@drawable/icon_email"
-                android:drawablePadding="10dp"
                 android:layout_marginBottom="15dp" />
 
             <Button
                 android:id="@+id/btn_signup_google"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="60dp"
                 android:text="Continue With Google"
-                android:backgroundTint="#3B0C5B"
+                android:backgroundTint="#6E408E"
                 android:textColor="@android:color/white"
-                android:gravity="center"
                 android:drawableStart="@drawable/icon_google"
-                android:drawablePadding="10dp"
                 android:layout_marginBottom="15dp" />
 
             <Button
                 android:id="@+id/btn_guest"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="60dp"
                 android:text="Continue as Guest"
-                android:backgroundTint="#3B0C5B"
+                android:backgroundTint="#6E408E"
                 android:textColor="@android:color/white"
-                android:gravity="center"
                 android:drawableStart="@drawable/icons_person"
-                android:drawablePadding="10dp"
                 android:layout_marginBottom="10dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

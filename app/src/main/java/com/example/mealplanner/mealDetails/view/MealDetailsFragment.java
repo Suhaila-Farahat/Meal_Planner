@@ -1,5 +1,8 @@
 package com.example.mealplanner.mealDetails.view;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
+import com.example.mealplanner.SessionManager;
+import com.example.mealplanner.auth.login.view.LoginActivity;
+import com.example.mealplanner.auth.signup.view.SignUpActivity;
 import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenter;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenterImpl;
@@ -41,6 +47,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     private String mealId;
     private String mealImageUrl;
     private String mealTitle;
+    private SessionManager sessionManager;
 
     @Nullable
     @Override
@@ -65,6 +72,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         addToCalendar = view.findViewById(R.id.addtocalender);
 
         ingredientRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        sessionManager = new SessionManager(getContext());
     }
 
     private void setupPresenter() {
@@ -90,14 +99,18 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
     private void setupListeners() {
         addToCalendar.setOnClickListener(v -> {
-            if (mealId != null) {
-                PlannedMeal plannedMeal = new PlannedMeal();
-                plannedMeal.setMealId(mealId);
-                plannedMeal.setMealName(mealTitle);
-                plannedMeal.setMealImage(mealImageUrl);
-                plannedMeal.setPlannedDate(System.currentTimeMillis());
+            if (sessionManager.isGuest()) {
+                showSignUpDialog();
+            } else {
+                if (mealId != null) {
+                    PlannedMeal plannedMeal = new PlannedMeal();
+                    plannedMeal.setMealId(mealId);
+                    plannedMeal.setMealName(mealTitle);
+                    plannedMeal.setMealImage(mealImageUrl);
+                    plannedMeal.setPlannedDate(System.currentTimeMillis());
 
-                mealDetailsPresenter.scheduleMeal(plannedMeal);
+                    mealDetailsPresenter.scheduleMeal(plannedMeal);
+                }
             }
         });
     }
@@ -161,6 +174,17 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         return matcher.find() ? matcher.group() : null;
     }
 
+    private void showSignUpDialog() {
+        new AlertDialog.Builder(getContext())
+                .setMessage("Only registered users can add meals to the Calendar")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
     @Override
     public void showError(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
@@ -170,8 +194,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     public void showMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
-
-
 
     @Override
     public void onDestroyView() {

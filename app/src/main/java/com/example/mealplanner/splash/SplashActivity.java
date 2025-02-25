@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mealplanner.R;
-import com.example.mealplanner.start.StartActivity;
+import com.example.mealplanner.start.view.StartActivity;
 
 import android.os.Handler;
 

@@ -37,11 +37,9 @@ public class MealListFragment extends Fragment implements MealListView {
         setupRecyclerView(view);
         setupPresenter();
 
-        if (getArguments() != null) {
-            String categoryName = getArguments().getString("category_name");
-            if (categoryName != null) {
-                presenter.fetchMeals(categoryName);
-            }
+        if (getArguments() != null && getArguments().containsKey("category_name")) {
+            String categoryName = getArguments().getString("category_name", ""); // Default empty string
+            presenter.fetchMeals(categoryName);
         }
 
         return view;
@@ -49,17 +47,17 @@ public class MealListFragment extends Fragment implements MealListView {
 
     private void setupRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.meal_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         FavoriteMealDao favoriteMealDao = AppDatabase.getInstance(requireContext()).favoriteMealDao();
-        adapter = new MealListAdapter(this::navigateToMealDetails, favoriteMealDao, () -> {});
+        adapter = new MealListAdapter(requireContext(), this::navigateToMealDetails, favoriteMealDao, () -> {});
         recyclerView.setAdapter(adapter);
     }
 
     private void setupPresenter() {
         MealRepository mealRepository = MealRepository.getInstance(
                 RemoteDataSource.getInstance(),
-                LocalDataSource.getInstance(requireContext())
+                LocalDataSource.getInstance(requireContext()) // Ensures correct Context usage
         );
         presenter = new MealListPresenterImp(this, mealRepository);
     }
@@ -71,7 +69,7 @@ public class MealListFragment extends Fragment implements MealListView {
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

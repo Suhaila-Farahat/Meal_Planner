@@ -1,15 +1,20 @@
 package com.example.mealplanner.categories.view;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
+import com.example.mealplanner.SessionManager;
+import com.example.mealplanner.auth.login.view.LoginActivity;
 import com.example.mealplanner.database.FavoriteMeal;
 import com.example.mealplanner.database.FavoriteMealDao;
 import com.example.mealplanner.models.mealModel.Meal;
@@ -25,6 +30,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
     private FavoriteMealDao favoriteMealDao;
     private OnFavoriteChangedListener favoriteChangedListener;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private SessionManager sessionManager;
+    private Context context;
 
     public interface OnMealClickListener {
         void onMealClick(Meal meal);
@@ -34,10 +41,12 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         void onFavoriteChanged();
     }
 
-    public MealListAdapter(OnMealClickListener listener, FavoriteMealDao favoriteMealDao, OnFavoriteChangedListener favoriteChangedListener) {
+    public MealListAdapter(Context context, OnMealClickListener listener, FavoriteMealDao favoriteMealDao, OnFavoriteChangedListener favoriteChangedListener) {
+        this.context = context;
         this.listener = listener;
         this.favoriteMealDao = favoriteMealDao;
         this.favoriteChangedListener = favoriteChangedListener;
+        this.sessionManager = new SessionManager(context);
     }
 
     public void setMeals(List<Meal> meals) {
@@ -70,6 +79,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
                 }, Throwable::printStackTrace));
 
         holder.favButton.setOnClickListener(v -> {
+            if (sessionManager.isGuest()) {
+                showSignUpDialog();
+                return;
+            }
+
             disposable.add(favoriteMealDao.isMealFavorite(meal.getId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -89,6 +103,19 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
             }
         });
     }
+
+    private void showSignUpDialog() {
+        new AlertDialog.Builder(context)
+                .setTitle("Sign Up Required")
+                .setMessage("Sign up to save your favorite meals!")
+                .setPositiveButton("Login", (dialog, which) -> {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    context.startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
 
     private void addMealToFavorites(Meal meal, ImageButton favoriteButton) {
         FavoriteMeal favoriteMeal = new FavoriteMeal(meal.getId(), meal.getName(), meal.getImageUrl());
