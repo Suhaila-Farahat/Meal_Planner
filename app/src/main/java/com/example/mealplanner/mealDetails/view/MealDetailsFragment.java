@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,10 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.mealplanner.R;
-import com.example.mealplanner.database.AppDatabase;
 import com.example.mealplanner.database.LocalDataSource;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenter;
 import com.example.mealplanner.mealDetails.presenter.MealDetailsPresenterImpl;
+import com.example.mealplanner.mealplanning.model.PlannedMeal;
 import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.mealModel.Ingredient;
 import com.example.mealplanner.models.mealModel.MealDetails;
@@ -36,6 +37,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     private WebView videoWebView;
     private RecyclerView ingredientRecyclerView;
     private ProgressBar progressBar;
+    private Button addToCalendar;
+    private String mealId;
+    private String mealImageUrl;
+    private String mealTitle;
 
     @Nullable
     @Override
@@ -44,6 +49,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         initializeViews(view);
         setupPresenter();
         loadMealDetails();
+        setupListeners();
         return view;
     }
 
@@ -56,6 +62,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         noVideoText = view.findViewById(R.id.noVideoText);
         ingredientRecyclerView = view.findViewById(R.id.ingredientRecyclerView);
         progressBar = view.findViewById(R.id.progressBar);
+        addToCalendar = view.findViewById(R.id.addtocalender);
 
         ingredientRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
     }
@@ -71,7 +78,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     }
 
     private void loadMealDetails() {
-        String mealId = getArguments() != null ? getArguments().getString("mealId") : null;
+        if (getArguments() != null) {
+            mealId = getArguments().getString("mealId");
+        }
         if (mealId != null) {
             mealDetailsPresenter.fetchMealDetails(mealId);
         } else {
@@ -79,13 +88,29 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         }
     }
 
+    private void setupListeners() {
+        addToCalendar.setOnClickListener(v -> {
+            if (mealId != null) {
+                PlannedMeal plannedMeal = new PlannedMeal();
+                plannedMeal.setMealId(mealId);
+                plannedMeal.setMealName(mealTitle);
+                plannedMeal.setMealImage(mealImageUrl);
+                plannedMeal.setPlannedDate(System.currentTimeMillis());
+
+                mealDetailsPresenter.scheduleMeal(plannedMeal);
+            }
+        });
+    }
+
     @Override
     public void showMealDetails(MealDetails mealDetails) {
-        hideLoading();
-        mealName.setText(mealDetails.getStrMeal());
+        mealTitle = mealDetails.getStrMeal();
+        mealImageUrl = mealDetails.getStrMealThumb();
+
+        mealName.setText(mealTitle);
         mealArea.setText(mealDetails.getStrArea());
         mealInstructions.setText(mealDetails.getStrInstructions());
-        Glide.with(this).load(mealDetails.getStrMealThumb()).into(mealImage);
+        Glide.with(this).load(mealImageUrl).into(mealImage);
 
         setupIngredientAdapter(mealDetails.getIngredients());
         handleVideoPlayback(mealDetails.getStrYoutube());
@@ -138,19 +163,15 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
     @Override
     public void showError(String message) {
-        hideLoading();
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
+    public void showMessage(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void hideLoading() {
-        progressBar.setVisibility(View.GONE);
-    }
+
 
     @Override
     public void onDestroyView() {

@@ -2,6 +2,7 @@ package com.example.mealplanner.models;
 
 import com.example.mealplanner.database.FavoriteMeal;
 import com.example.mealplanner.database.LocalDataSource;
+import com.example.mealplanner.mealplanning.model.PlannedMeal;
 import com.example.mealplanner.models.responses.CategoryResponse;
 import com.example.mealplanner.models.responses.IngredientResponse;
 import com.example.mealplanner.models.responses.MealDetailsResponse;
@@ -16,9 +17,9 @@ import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 
 public class MealRepository {
-    private static  MealRepository instance = null;
-    private  RemoteDataSource remoteDataSource;
-    private  LocalDataSource localDataSource;
+    private static volatile MealRepository instance = null;
+    private final RemoteDataSource remoteDataSource;
+    private final LocalDataSource localDataSource;
 
     private MealRepository(RemoteDataSource remoteSource, LocalDataSource localSource) {
         this.remoteDataSource = remoteSource;
@@ -65,7 +66,7 @@ public class MealRepository {
         return remoteDataSource.getIngredients();
     }
 
-    // Local Database Operations
+    // Favorite Meals - Local Database Operations
     public Completable addMealToFavorites(FavoriteMeal meal) {
         return localDataSource.insertFavoriteMeal(meal);
     }
@@ -84,5 +85,22 @@ public class MealRepository {
 
     public Maybe<FavoriteMeal> getFavoriteMealById(String mealId) {
         return localDataSource.getFavoriteMealById(mealId);
+    }
+
+    // Meal Scheduling Operations
+    public Completable scheduleMeal(PlannedMeal meal) {
+        return localDataSource.insertPlannedMeal(meal);
+    }
+
+    public Completable removeScheduledMeal(String mealId) {
+        return localDataSource.deletePlannedMeal(mealId);
+    }
+
+    public Flowable<List<PlannedMeal>> getAllScheduledMeals() {
+        return localDataSource.getAllPlannedMeals();
+    }
+
+    public Maybe<PlannedMeal> getPlannedMealById(String mealId) {
+        return localDataSource.getPlannedMealById(mealId);
     }
 }

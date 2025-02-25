@@ -3,6 +3,7 @@ package com.example.mealplanner.mealDetails.presenter;
 import com.example.mealplanner.mealDetails.view.MealDetailsView;
 import com.example.mealplanner.models.MealRepository;
 import com.example.mealplanner.models.responses.MealDetailsResponse;
+import com.example.mealplanner.mealplanning.model.PlannedMeal;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -21,20 +22,31 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
 
     @Override
     public void fetchMealDetails(String mealId) {
-        view.showLoading();
         disposables.add(
                 mealRepository.getMealDetails(mealId)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                response -> handleResponse(response),
-                                throwable -> handleError(throwable)
+                                this::handleResponse,
+                                this::handleError
+                        )
+        );
+    }
+
+    @Override
+    public void scheduleMeal(PlannedMeal plannedMeal) {
+        disposables.add(
+                mealRepository.scheduleMeal(plannedMeal)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> view.showMessage("Meal scheduled successfully"),
+                                throwable -> view.showError("Error scheduling meal: " + throwable.getMessage())
                         )
         );
     }
 
     private void handleResponse(MealDetailsResponse response) {
-        view.hideLoading();
         if (response.getMealDetails() != null && !response.getMealDetails().isEmpty()) {
             view.showMealDetails(response.getMealDetails().get(0));
         } else {
@@ -43,7 +55,6 @@ public class MealDetailsPresenterImpl implements MealDetailsPresenter {
     }
 
     private void handleError(Throwable throwable) {
-        view.hideLoading();
         view.showError("Error loading meal details: " + throwable.getMessage());
     }
 

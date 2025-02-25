@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.example.mealplanner.favorites.view.FavoritesFragment;
 import com.example.mealplanner.home.view.HomeFragment;
+import com.example.mealplanner.mealplanning.view.CalendarPlannedFragment;
 import com.example.mealplanner.search.view.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_favorites) {
                 selectedFragment = new FavoritesFragment();
             } else if (itemId == R.id.nav_calender) {
-                selectedFragment = new CalendarFragment();
+                selectedFragment = new CalendarPlannedFragment();
             } else if (itemId == R.id.nav_profile) {
                 selectedFragment = new ProfileFragment();
             }
