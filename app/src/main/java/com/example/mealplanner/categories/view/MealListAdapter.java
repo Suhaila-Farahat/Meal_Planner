@@ -18,6 +18,8 @@ import com.example.mealplanner.auth.login.view.LoginActivity;
 import com.example.mealplanner.database.FavoriteMeal;
 import com.example.mealplanner.database.FavoriteMealDao;
 import com.example.mealplanner.models.mealModel.Meal;
+import com.example.mealplanner.start.view.StartActivity;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -108,8 +110,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         new AlertDialog.Builder(context)
                 .setTitle("Sign Up Required")
                 .setMessage("Sign up to save your favorite meals!")
-                .setPositiveButton("Login", (dialog, which) -> {
-                    Intent intent = new Intent(context, LoginActivity.class);
+                .setPositiveButton("Sign Up", (dialog, which) -> {
+                    Intent intent = new Intent(context, StartActivity.class);
                     context.startActivity(intent);
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())

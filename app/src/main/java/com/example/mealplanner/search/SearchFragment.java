@@ -1,4 +1,4 @@
-package com.example.mealplanner.search.view;
+package com.example.mealplanner.search;
 
 import androidx.fragment.app.Fragment;
 

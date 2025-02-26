@@ -12,6 +12,7 @@ import com.example.mealplanner.SessionManager;
 import com.example.mealplanner.auth.login.view.LoginActivity;
 import com.example.mealplanner.start.presenter.StartPresenter;
 import com.example.mealplanner.start.presenter.StartPresenterImpl;
+import com.example.mealplanner.util.AuthUtils;
 
 public class StartActivity extends AppCompatActivity implements StartView {
 
@@ -26,6 +27,10 @@ public class StartActivity extends AppCompatActivity implements StartView {
 
         presenter = new StartPresenterImpl(this, this);
         sessionManager = new SessionManager(this);
+
+        if (AuthUtils.isUserLoggedIn(this)) {
+            navigateToMain();
+        }
 
         Button btnSignUpEmail = findViewById(R.id.btn_signup_email);
         Button btnSignUpGoogle = findViewById(R.id.btn_signup_google);

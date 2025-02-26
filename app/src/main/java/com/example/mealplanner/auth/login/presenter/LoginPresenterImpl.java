@@ -1,8 +1,10 @@
 package com.example.mealplanner.auth.login.presenter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.text.TextUtils;
 
+import com.example.mealplanner.BackupManager;
 import com.example.mealplanner.auth.login.view.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,10 +17,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     private LoginView view;
     private FirebaseAuth mAuth;
+    private Context context;
 
-    public LoginPresenterImpl(LoginView view) {
+    public LoginPresenterImpl(LoginView view ,Context context) {
         this.view = view;
         this.mAuth = FirebaseAuth.getInstance();
+        this.context =context;
     }
 
     @SuppressLint("CheckResult")
@@ -36,6 +40,13 @@ public class LoginPresenterImpl implements LoginPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         user -> {
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            if (currentUser != null) {
+                                String uid = currentUser.getUid();
+                                BackupManager backupManager = new BackupManager(context);
+                                backupManager.restoreData(uid);
+
+                            }
                             view.showLoginSuccess("Welcome back, " + user.getEmail());
                         },
                         throwable -> {
@@ -64,6 +75,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void onDestroy() {
+
         view = null;
     }
 }

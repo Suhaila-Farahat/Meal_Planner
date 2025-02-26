@@ -1,5 +1,6 @@
 package com.example.mealplanner.mealplanning.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,10 +59,9 @@ public class CalendarPlannedFragment extends Fragment implements CalendarView, P
     }
 
     @Override
-    public void showError(String message) {
-        // Show error (e.g., Toast message)
-    }
+    public void showError(String message) {}
 
+    @SuppressLint("CheckResult")
     @Override
     public void onMealDeleted(PlannedMeal meal, int position) {
         calendarPresenter.deletePlannedMeal(meal.getMealId())

@@ -12,6 +12,7 @@ import com.example.mealplanner.R;
 import com.example.mealplanner.auth.login.presenter.LoginPresenter;
 import com.example.mealplanner.auth.login.presenter.LoginPresenterImpl;
 import com.example.mealplanner.auth.signup.view.SignUpActivity;
+import com.example.mealplanner.util.AuthUtils;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
@@ -30,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         loginBtn = findViewById(R.id.loginButton);
         signUpTextButton = findViewById(R.id.signUpTextButtonLogin);
 
-        presenter = new LoginPresenterImpl(this);
+        presenter = new LoginPresenterImpl(this, this);
 
         loginBtn.setOnClickListener(v -> {
             String emailStr = email.getText().toString().trim();
@@ -46,6 +47,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     public void showLoginSuccess(String message) {
+        String userId = "sample_user_id";
+
+        AuthUtils.saveLoginState(this, true, userId);
+
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }

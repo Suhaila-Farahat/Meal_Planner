@@ -38,7 +38,7 @@ public class MealListFragment extends Fragment implements MealListView {
         setupPresenter();
 
         if (getArguments() != null && getArguments().containsKey("category_name")) {
-            String categoryName = getArguments().getString("category_name", ""); // Default empty string
+            String categoryName = getArguments().getString("category_name", "");
             presenter.fetchMeals(categoryName);
         }
 
@@ -57,7 +57,7 @@ public class MealListFragment extends Fragment implements MealListView {
     private void setupPresenter() {
         MealRepository mealRepository = MealRepository.getInstance(
                 RemoteDataSource.getInstance(),
-                LocalDataSource.getInstance(requireContext()) // Ensures correct Context usage
+                LocalDataSource.getInstance(requireContext())
         );
         presenter = new MealListPresenterImp(this, mealRepository);
     }

@@ -19,6 +19,8 @@ import com.example.mealplanner.auth.signup.view.SignUpActivity;
 import com.example.mealplanner.database.FavoriteMeal;
 import com.example.mealplanner.database.FavoriteMealDao;
 import com.example.mealplanner.models.mealModel.Meal;
+import com.example.mealplanner.start.view.StartActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -104,8 +106,8 @@ public class CountryMealListAdapter extends RecyclerView.Adapter<CountryMealList
         new AlertDialog.Builder(context)
                 .setTitle("Sign Up Required")
                 .setMessage("Only registered users can add meals to favorites. Sign up now!")
-                .setPositiveButton("Login", (dialog, which) -> {
-                    Intent intent = new Intent(context, LoginActivity.class);
+                .setPositiveButton("Sign Up", (dialog, which) -> {
+                    Intent intent = new Intent(context, StartActivity.class);
                     context.startActivity(intent);
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())

@@ -14,7 +14,9 @@ public class CategoryResponse {
     }
 
     public void setCategories(List<MealCategory> categories) {
+
         this.categories = categories;
     }
+    
 }
 

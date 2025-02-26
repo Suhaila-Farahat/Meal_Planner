@@ -90,9 +90,7 @@ public class FavoritesFragment extends Fragment implements FavoritesView {
     }
 
     @Override
-    public void onFavoriteChecked(boolean isFavorite) {
-        // Handle UI updates if needed
-    }
+    public void onFavoriteChecked(boolean isFavorite) {}
 
     @Override
     public void onDestroyView() {

@@ -2,19 +2,17 @@ package com.example.mealplanner.auth.signup.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mealplanner.MainActivity;
 import com.example.mealplanner.R;
-import com.example.mealplanner.auth.login.view.LoginActivity;
 import com.example.mealplanner.auth.signup.presenter.SignUpPresenter;
 import com.example.mealplanner.auth.signup.presenter.SignUpPresenterImpl;
+import com.example.mealplanner.util.AuthUtils;
 
 public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
@@ -43,12 +41,16 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
             presenter.signUp(emailStr, userStr, passStr, confirmStr);
         });
-
     }
 
     @Override
     public void showSignUpSuccess(String message) {
+        String userId = "sample_user_id";
+
+        AuthUtils.saveLoginState(this, true, userId);
+
         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+        finish();
     }
 
     @Override
